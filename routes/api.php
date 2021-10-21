@@ -27,7 +27,13 @@ Route::group(['middleware' => 'auth:dosen', 'prefix' => 'dosen'], function () {
 });
 
 Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function () {
+    // users
     Route::post('/create/{tipe}', [AdminController::class, 'createUser']);
+    Route::get('/users/{tipe}', [AdminController::class, 'getUsers']);
+    Route::put('/user/{tipe}/{id}', [AdminController::class, 'updateUser']);
+    Route::delete('/user/{tipe}/{id}', [AdminController::class, 'deleteUser']);
+
+    // chat
 
     Route::get('/logout', [AuthController::class, 'logout']);
 });
