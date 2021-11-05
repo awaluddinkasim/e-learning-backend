@@ -25,7 +25,19 @@ Route::group(['middleware' => 'auth:user'], function () {
     // kelas
     Route::post('/enroll', [UserController::class, 'enroll']);
     Route::get('/kelas/{userID}', [UserController::class, 'getKelas']);
-    Route::get('/kelas/data/{kode}', [DosenController::class, 'getDataKelas']);
+    Route::get('/kelas/data/{kode}', [UserController::class, 'getDataKelas']);
+
+    // materi
+    Route::get('/materi/{kode}', [UserController::class, 'getMateri']);
+
+    // tugas
+    Route::get('/tugas/{kode}', [UserController::class, 'getTugas']);
+    Route::get('/tugas/{kode}/{id}', [UserController::class, 'getDetailTugas']);
+    Route::get('/tugas/{kode}/{id}/{uploader}', [UserController::class, 'cekTugas']);
+    Route::post('/tugas/{kode}/{id}', [UserController::class, 'uploadTugas']);
+
+    // kuis
+    Route::get('/kuis/{kode}', [UserController::class, 'getKuis']);
 
     // logout
     Route::get('/logout', [AuthController::class, 'logout']);
@@ -42,6 +54,7 @@ Route::group(['middleware' => 'auth:dosen', 'prefix' => 'dosen'], function () {
 
     // tugas
     Route::post('/tugas', [DosenController::class, 'uploadTugas']);
+    Route::get('/tugas-masuk/{kode}/{id}', [DosenController::class, 'getTugasMasuk']);
 
 
     // materi

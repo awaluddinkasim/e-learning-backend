@@ -5,6 +5,10 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\Enroll;
 use App\Models\Kelas;
+use App\Models\Kuis;
+use App\Models\Materi;
+use App\Models\Tugas;
+use App\Models\TugasMasuk;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -56,6 +60,83 @@ class UserController extends Controller
             'materi' => $materi,
             'tugas' => $tugas,
             'kuis' => $kuis,
+        ], 200);
+    }
+
+    public function getMateri($kode)
+    {
+        $materi = Materi::where('kode_kelas', $kode)->get();
+
+        return response()->json([
+            'message' => 'berhasil',
+            'daftarMateri' => $materi
+        ], 200);
+    }
+
+    public function getTugas($kode)
+    {
+        $tugas = Tugas::where('kode_kelas', $kode)->get();
+
+        return response()->json([
+            'message' => 'berhasil',
+            'daftarTugas' => $tugas
+        ], 200);
+    }
+
+    public function getDetailTugas($kode, $id)
+    {
+        $dataTugas = Tugas::find($id);
+
+        return response()->json([
+            'message' => 'berhasil',
+            'detailTugas' => $dataTugas
+        ], 200);
+    }
+
+    public function cekTugas($kode, $id, $uploader)
+    {
+        $tugas = TugasMasuk::where('id_tugas', $id)->where('uploader', $uploader)->first();
+        if ($tugas) {
+            return response()->json([
+                'message' => 'Tugas Ada'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Tugas Tidak Ada'
+            ], 200);
+        }
+    }
+
+    public function uploadTugas(Request $req, $kode, $id)
+    {
+        $cekTugas = TugasMasuk::where('id_tugas', $id)->where('uploader', $req->uploader)->first();
+        if ($cekTugas) {
+            return response()->json([
+                'message' => 'Tugas sudah dikumpul sebelumnya'
+            ], 401);
+        }
+        $file = $req->file('file');
+        $file->storeAs('public/tugas/'.$id, md5($req->uploader).'.'.$file->getClientOriginalExtension());
+        $filename = md5($req->uploader).'.'.$file->getClientOriginalExtension();
+
+        $t = new TugasMasuk();
+        $t->id_tugas = $id;
+        $t->uploader = $req->uploader;
+        $t->file = $filename;
+        $t->save();
+
+        return response()->json([
+            'message' => 'berhasil'
+        ], 200);
+    }
+
+    public function getKuis($kode)
+    {
+        $kuis = Kuis::where('kode_kelas', $kode)->get();
+
+        return response()->json([
+            'message' => 'berhasil',
+            'daftarKuis' => $kuis
         ], 200);
     }
 }

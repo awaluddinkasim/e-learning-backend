@@ -8,6 +8,7 @@ use App\Models\Kelas;
 use App\Models\Kuis;
 use App\Models\Materi;
 use App\Models\Tugas;
+use App\Models\TugasMasuk;
 use Illuminate\Http\Request;
 use Str;
 
@@ -71,6 +72,16 @@ class DosenController extends Controller
         $t->save();
         return response()->json([
             'cek' => $req->all()
+        ], 200);
+    }
+
+    public function getTugasMasuk($kode, $id)
+    {
+        $data = TugasMasuk::where('id_tugas', $id)->get();
+
+        return response()->json([
+            'message' => 'berhasil',
+            'daftarTugas' => $data
         ], 200);
     }
 
