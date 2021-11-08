@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Enroll;
 use App\Models\Kelas;
 use App\Models\Kuis;
+use App\Models\KuisTerkumpul;
 use App\Models\Materi;
 use App\Models\Tugas;
 use App\Models\TugasMasuk;
@@ -98,8 +99,8 @@ class DosenController extends Controller
     public function uploadMateri(Request $req)
     {
         $file = $req->file('file');
-        $file->storeAs('public/materi', md5($req->kode).'.'.$file->getClientOriginalExtension());
-        $filename = md5($req->kode).'.'.$file->getClientOriginalExtension();
+        $filename = md5($req->kode.Str::random(3)).'.'.$file->getClientOriginalExtension();
+        $file->storeAs('materi', $filename, 'public_uploads');
 
         $m = new Materi();
         $m->kode_kelas = $req->kode;
@@ -127,8 +128,8 @@ class DosenController extends Controller
     public function uploadKuis(Request $req)
     {
         $file = $req->file('file');
-        $file->storeAs('public/kuis', md5($req->kode).'.'.$file->getClientOriginalExtension());
-        $filename = md5($req->kode).'.'.$file->getClientOriginalExtension();
+        $filename = md5($req->kode.Str::random(3)).'.'.$file->getClientOriginalExtension();
+        $file->storeAs('kuis', $filename, 'public_uploads');
 
         $m = new Kuis();
         $m->kode_kelas = $req->kode;
@@ -140,6 +141,16 @@ class DosenController extends Controller
         return response()->json([
             'message' => 'berhasil',
             'data' => $req->all()
+        ], 200);
+    }
+
+    public function getKuisMasuk($kode, $id)
+    {
+        $data = KuisTerkumpul::where('id_kuis', $id)->get();
+
+        return response()->json([
+            'message' => 'berhasil',
+            'daftarKuis' => $data
         ], 200);
     }
 }

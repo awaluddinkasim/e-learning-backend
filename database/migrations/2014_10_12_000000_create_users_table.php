@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('username', 20)->unique();
             $table->string('name', 100);
             $table->string('password');
+            $table->string('prodi', 50);
             $table->enum('jk', ['L', 'P']);
             $table->timestamp('last_online');
             $table->timestamps();

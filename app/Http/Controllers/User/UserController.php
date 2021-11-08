@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Enroll;
 use App\Models\Kelas;
 use App\Models\Kuis;
+use App\Models\KuisTerkumpul;
 use App\Models\Materi;
 use App\Models\Tugas;
 use App\Models\TugasMasuk;
@@ -116,7 +117,7 @@ class UserController extends Controller
             ], 401);
         }
         $file = $req->file('file');
-        $file->storeAs('public/tugas/'.$id, md5($req->uploader).'.'.$file->getClientOriginalExtension());
+        $file->storeAs('tugas/'.$id, md5($req->uploader).'.'.$file->getClientOriginalExtension(), 'public_uploads');
         $filename = md5($req->uploader).'.'.$file->getClientOriginalExtension();
 
         $t = new TugasMasuk();
@@ -137,6 +138,53 @@ class UserController extends Controller
         return response()->json([
             'message' => 'berhasil',
             'daftarKuis' => $kuis
+        ], 200);
+    }
+
+    public function getDetailKuis($kode, $id)
+    {
+        $dataKuis = Kuis::find($id);
+
+        return response()->json([
+            'message' => 'berhasil',
+            'detailKuis' => $dataKuis
+        ], 200);
+    }
+
+    public function cekKuis($kode, $id, $uploader)
+    {
+        $tugas = KuisTerkumpul::where('id_kuis', $id)->where('uploader', $uploader)->first();
+        if ($tugas) {
+            return response()->json([
+                'message' => 'Kuis Ada'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Kuis Tidak Ada'
+            ], 200);
+        }
+    }
+
+    public function kumpulKuis(Request $req, $kode, $id)
+    {
+        $cekKuis = KuisTerkumpul::where('id_kuis', $id)->where('uploader', $req->uploader)->first();
+        if ($cekKuis) {
+            return response()->json([
+                'message' => 'Kuis sudah dikumpul sebelumnya'
+            ], 401);
+        }
+        $file = $req->file('file');
+        $file->storeAs('kuis/'.$id, md5($req->uploader).'.'.$file->getClientOriginalExtension(), 'public_uploads');
+        $filename = md5($req->uploader).'.'.$file->getClientOriginalExtension();
+
+        $t = new KuisTerkumpul();
+        $t->id_kuis = $id;
+        $t->uploader = $req->uploader;
+        $t->file = $filename;
+        $t->save();
+
+        return response()->json([
+            'message' => 'berhasil'
         ], 200);
     }
 }

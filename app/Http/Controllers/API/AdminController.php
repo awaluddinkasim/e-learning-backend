@@ -31,6 +31,28 @@ class AdminController extends Controller
         ], 200);
     }
 
+    public function getUser($tipe, $id)
+    {
+        switch ($tipe) {
+            case 'user':
+                $user = User::find($id);
+                break;
+
+            case 'dosen':
+                $user = Dosen::find($id);
+                break;
+
+            default:
+                $user = [];
+                break;
+        }
+
+        return response()->json([
+            'message' => "berhasil",
+            'user' => $user
+        ], 200);
+    }
+
     public function createUser(Request $req, $tipe)
     {
         try {
@@ -40,6 +62,7 @@ class AdminController extends Controller
                     $user->username = $req->username;
                     $user->name = $req->name;
                     $user->password = bcrypt($req->password);
+                    $user->prodi = $req->prodi;
                     $user->jk = $req->jk;
                     $user->save();
                     break;
@@ -50,7 +73,6 @@ class AdminController extends Controller
                     $user->name = $req->name;
                     $user->password = bcrypt($req->password);
                     $user->jk = $req->jk;
-                    $user->fakultas = $req->fakultas;
                     $user->prodi = $req->prodi;
                     $user->save();
                     break;
@@ -77,6 +99,7 @@ class AdminController extends Controller
                     if ($req->password) {
                         $user->password = bcrypt($req->password);
                     }
+                    $user->prodi = $req->prodi;
                     $user->jk = $req->jk;
                     $user->save();
                     break;
@@ -89,7 +112,6 @@ class AdminController extends Controller
                         $user->password = bcrypt($req->password);
                     }
                     $user->jk = $req->jk;
-                    $user->fakultas = $req->fakultas;
                     $user->prodi = $req->prodi;
                     $user->save();
                     break;

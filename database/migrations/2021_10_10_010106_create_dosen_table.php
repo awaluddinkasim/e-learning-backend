@@ -19,7 +19,6 @@ class CreateDosenTable extends Migration
             $table->string('name', 100);
             $table->string('password');
             $table->enum('jk', ['L', 'P']);
-            $table->string('fakultas', 50);
             $table->string('prodi', 50);
             $table->timestamp('last_online');
             $table->timestamps();

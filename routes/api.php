@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\API\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,6 +7,10 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\Dosen\DosenController;
 use App\Http\Controllers\Twilio\AccessTokenController;
 use App\Http\Controllers\User\UserController;
+use App\Models\Kuis;
+use App\Models\KuisTerkumpul;
+use App\Models\Materi;
+use App\Models\TugasMasuk;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +41,9 @@ Route::group(['middleware' => 'auth:user'], function () {
 
     // kuis
     Route::get('/kuis/{kode}', [UserController::class, 'getKuis']);
+    Route::get('/kuis/{kode}/{id}', [UserController::class, 'getDetailKuis']);
+    Route::get('/kuis/{kode}/{id}/{uploader}', [UserController::class, 'cekKuis']);
+    Route::post('/kuis/{kode}/{id}', [UserController::class, 'kumpulKuis']);
 
     // logout
     Route::get('/logout', [AuthController::class, 'logout']);
@@ -64,6 +70,7 @@ Route::group(['middleware' => 'auth:dosen', 'prefix' => 'dosen'], function () {
     // kuis
     Route::get('/kuis/{kode}', [DosenController::class, 'getKuis']);
     Route::post('/kuis', [DosenController::class, 'uploadKuis']);
+    Route::get('/kuis/{kode}/{id}', [DosenController::class, 'getKuisMasuk']);
 
     // logout
     Route::get('/logout', [AuthController::class, 'logout']);
@@ -73,6 +80,7 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function () {
     // users
     Route::post('/create/{tipe}', [AdminController::class, 'createUser']);
     Route::get('/users/{tipe}', [AdminController::class, 'getUsers']);
+    Route::get('/user/{tipe}/{id}', [AdminController::class, 'getUser']);
     Route::put('/user/{tipe}/{id}', [AdminController::class, 'updateUser']);
     Route::delete('/user/{tipe}/{id}', [AdminController::class, 'deleteUser']);
 
@@ -80,6 +88,29 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function () {
 });
 
 Route::get('access_token', [AccessTokenController::class, 'generate_token']);
+
+Route::prefix('download')->group(function() {
+    Route::get('/kuis/{id}', function($id) {
+        $data = Kuis::find($id);
+        $file = public_path('f/kuis/'.$data->file);
+        return response()->download($file);
+    });
+    Route::get('/materi/{id}', function($id) {
+        $data = Materi::find($id);
+        $file = public_path('f/materi/'.$data->file);
+        return response()->download($file);
+    });
+    Route::get('/tugas-masuk/{id}', function($id) {
+        $data = TugasMasuk::find($id);
+        $file = public_path('f/tugas/'.$data->id_tugas.'/'.$data->file);
+        return response()->download($file);
+    });
+    Route::get('/kuis-masuk/{id}', function($id) {
+        $data = KuisTerkumpul::find($id);
+        $file = public_path('f/kuis/'.$data->id_kuis.'/'.$data->file);
+        return response()->download($file);
+    });
+});
 
 
 Route::post('/login', [AuthController::class, 'loginUser']);
