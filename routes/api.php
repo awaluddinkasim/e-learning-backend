@@ -118,6 +118,7 @@ Route::prefix('download')->group(function() {
 });
 
 
+// Auth
 Route::post('/login', [AuthController::class, 'loginUser']);
 Route::post('/dosen/login', [AuthController::class, 'loginDosen']);
 Route::post('/admin/login', [AuthController::class, 'loginAdmin']);

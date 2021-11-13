@@ -16,7 +16,7 @@ class CreateDosenTable extends Migration
         Schema::create('dosen', function (Blueprint $table) {
             $table->id();
             $table->string('username', 12)->unique();
-            $table->string('name', 100);
+            $table->string('name', 50);
             $table->string('password');
             $table->enum('jk', ['L', 'P']);
             $table->string('prodi', 50);
