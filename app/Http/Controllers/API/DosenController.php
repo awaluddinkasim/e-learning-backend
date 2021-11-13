@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Dosen;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dosen;
 use App\Models\Enroll;
 use App\Models\Kelas;
 use App\Models\Kuis;
@@ -152,5 +153,27 @@ class DosenController extends Controller
             'message' => 'berhasil',
             'daftarKuis' => $data
         ], 200);
+    }
+
+    public function updateProfile(Request $req)
+    {
+        $u = Dosen::find($req->id);
+        if ($u) {
+            $u->name = $req->name;
+            $u->jk = $req->jk;
+            $u->prodi = $req->prodi;
+            if ($req->password) {
+                $u->password = bcrypt($req->password);
+            }
+            $u->save();
+
+            return response()->json([
+                'message' => 'berhasil'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Dosen tidak ditemukan',
+            ], 404);
+        }
     }
 }

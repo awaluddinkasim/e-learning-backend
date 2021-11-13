@@ -16,7 +16,7 @@ class CreateMateriTable extends Migration
         Schema::create('materi', function (Blueprint $table) {
             $table->id();
             $table->string('kode_kelas', 7);
-            $table->string('judul');
+            $table->string('judul', 50);
             $table->text('deskripsi');
             $table->string('file');
             $table->timestamps();

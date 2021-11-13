@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Dosen;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -148,6 +149,26 @@ class AdminController extends Controller
                 'message' => 'gagal',
             ], 400);
 
+        }
+    }
+
+    public function updateProfile(Request $req)
+    {
+        $u = Admin::find($req->id);
+        if ($u) {
+            $u->name = $req->name;
+            if ($req->password) {
+                $u->password = bcrypt($req->password);
+            }
+            $u->save();
+
+            return response()->json([
+                'message' => 'berhasil'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Admin tidak ditemukan',
+            ], 404);
         }
     }
 }

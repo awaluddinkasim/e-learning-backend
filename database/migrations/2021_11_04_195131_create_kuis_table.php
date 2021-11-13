@@ -16,7 +16,7 @@ class CreateKuisTable extends Migration
         Schema::create('kuis', function (Blueprint $table) {
             $table->id();
             $table->string('kode_kelas', 7);
-            $table->string('judul');
+            $table->string('judul', 50);
             $table->text('instruksi');
             $table->string('file');
             $table->timestamps();

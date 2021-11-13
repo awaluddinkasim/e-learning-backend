@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Enroll;
@@ -10,6 +10,7 @@ use App\Models\KuisTerkumpul;
 use App\Models\Materi;
 use App\Models\Tugas;
 use App\Models\TugasMasuk;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -186,5 +187,27 @@ class UserController extends Controller
         return response()->json([
             'message' => 'berhasil'
         ], 200);
+    }
+
+    public function updateProfile(Request $req)
+    {
+        $u = User::find($req->id);
+        if ($u) {
+            $u->name = $req->name;
+            $u->jk = $req->jk;
+            $u->prodi = $req->prodi;
+            if ($req->password) {
+                $u->password = bcrypt($req->password);
+            }
+            $u->save();
+
+            return response()->json([
+                'message' => 'berhasil'
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Dosen tidak ditemukan',
+            ], 404);
+        }
     }
 }

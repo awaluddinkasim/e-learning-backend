@@ -16,7 +16,7 @@ class CreateTugasTable extends Migration
         Schema::create('tugas', function (Blueprint $table) {
             $table->id();
             $table->string('kode_kelas', 7);
-            $table->string('nama_tugas');
+            $table->string('nama_tugas', 50);
             $table->text('deskripsi');
             $table->timestamps();
             $table->foreign('kode_kelas')->references('kode')->on('kelas')

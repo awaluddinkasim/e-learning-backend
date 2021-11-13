@@ -4,9 +4,9 @@ use App\Http\Controllers\API\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
-use App\Http\Controllers\Dosen\DosenController;
+use App\Http\Controllers\API\DosenController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Twilio\AccessTokenController;
-use App\Http\Controllers\User\UserController;
 use App\Models\Kuis;
 use App\Models\KuisTerkumpul;
 use App\Models\Materi;
@@ -45,6 +45,9 @@ Route::group(['middleware' => 'auth:user'], function () {
     Route::get('/kuis/{kode}/{id}/{uploader}', [UserController::class, 'cekKuis']);
     Route::post('/kuis/{kode}/{id}', [UserController::class, 'kumpulKuis']);
 
+
+    Route::post('/profile', [UserController::class, 'updateProfile']);
+
     // logout
     Route::get('/logout', [AuthController::class, 'logout']);
 });
@@ -72,6 +75,7 @@ Route::group(['middleware' => 'auth:dosen', 'prefix' => 'dosen'], function () {
     Route::post('/kuis', [DosenController::class, 'uploadKuis']);
     Route::get('/kuis/{kode}/{id}', [DosenController::class, 'getKuisMasuk']);
 
+    Route::post('/profile', [DosenController::class, 'updateProfile']);
     // logout
     Route::get('/logout', [AuthController::class, 'logout']);
 });
@@ -84,6 +88,7 @@ Route::group(['middleware' => 'auth:admin', 'prefix' => 'admin'], function () {
     Route::put('/user/{tipe}/{id}', [AdminController::class, 'updateUser']);
     Route::delete('/user/{tipe}/{id}', [AdminController::class, 'deleteUser']);
 
+    Route::post('/profile', [AdminController::class, 'updateProfile']);
     Route::get('/logout', [AuthController::class, 'logout']);
 });
 
