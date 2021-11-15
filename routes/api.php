@@ -63,16 +63,20 @@ Route::group(['middleware' => 'auth:dosen', 'prefix' => 'dosen'], function () {
 
     // tugas
     Route::post('/tugas', [DosenController::class, 'uploadTugas']);
+    Route::delete('/tugas/{id}', [DosenController::class, 'hapusTugas']);
     Route::get('/tugas-masuk/{kode}/{id}', [DosenController::class, 'getTugasMasuk']);
+    Route::post('/tugas-masuk/nilai', [DosenController::class, 'tugasNilai']);
 
 
     // materi
     Route::get('/materi/{kode}', [DosenController::class, 'getMateri']);
     Route::post('/materi', [DosenController::class, 'uploadMateri']);
+    Route::delete('/materi/{id}', [DosenController::class, 'deleteMateri']);
 
     // kuis
     Route::get('/kuis/{kode}', [DosenController::class, 'getKuis']);
     Route::post('/kuis', [DosenController::class, 'uploadKuis']);
+    Route::delete('/kuis/{id}', [DosenController::class, 'deleteKuis']);
     Route::get('/kuis/{kode}/{id}', [DosenController::class, 'getKuisMasuk']);
 
     Route::post('/profile', [DosenController::class, 'updateProfile']);

@@ -9,6 +9,7 @@ use App\Models\Kelas;
 use App\Models\Kuis;
 use App\Models\KuisTerkumpul;
 use App\Models\Materi;
+use App\Models\Nilai;
 use App\Models\Tugas;
 use App\Models\TugasMasuk;
 use Illuminate\Http\Request;
@@ -77,13 +78,33 @@ class DosenController extends Controller
         ], 200);
     }
 
+    public function hapusTugas($id)
+    {
+        Tugas::find($id)->delete();
+        return response()->json([
+            'message' => 'berhasil'
+        ], 200);
+    }
+
     public function getTugasMasuk($kode, $id)
     {
-        $data = TugasMasuk::where('id_tugas', $id)->get();
+        $data = TugasMasuk::where('id_tugas', $id)->with('nilai')->get();
 
         return response()->json([
             'message' => 'berhasil',
             'daftarTugas' => $data
+        ], 200);
+    }
+
+    public function tugasNilai(Request $req)
+    {
+        $n = new Nilai();
+        $n->id_tugas = $req->id_tugas;
+        $n->nilai = $req->nilai;
+        $n->save();
+
+        return response()->json([
+            'message' => 'berhasil'
         ], 200);
     }
 
@@ -116,6 +137,14 @@ class DosenController extends Controller
         ], 200);
     }
 
+    public function hapusMateri($id)
+    {
+        Materi::find($id)->delete();
+        return response()->json([
+            'message' => 'berhasil'
+        ], 200);
+    }
+
     public function getKuis($kode)
     {
         $kuis = Kuis::where('kode_kelas', $kode)->get();
@@ -142,6 +171,14 @@ class DosenController extends Controller
         return response()->json([
             'message' => 'berhasil',
             'data' => $req->all()
+        ], 200);
+    }
+
+    public function hapusKuis($id)
+    {
+        Kuis::find($id)->delete();
+        return response()->json([
+            'message' => 'berhasil'
         ], 200);
     }
 

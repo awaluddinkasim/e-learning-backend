@@ -97,14 +97,16 @@ class UserController extends Controller
 
     public function cekTugas($kode, $id, $uploader)
     {
-        $tugas = TugasMasuk::where('id_tugas', $id)->where('uploader', $uploader)->first();
+        $tugas = TugasMasuk::where('id_tugas', $id)->where('uploader', $uploader)->with('nilai')->first();
         if ($tugas) {
             return response()->json([
-                'message' => 'Tugas Ada'
+                'message' => 'Tugas Ada',
+                'nilai' => $tugas->nilai->nilai
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Tugas Tidak Ada'
+                'message' => 'Tugas Tidak Ada',
+                'nilai' => $tugas->nilai->nilai
             ], 200);
         }
     }

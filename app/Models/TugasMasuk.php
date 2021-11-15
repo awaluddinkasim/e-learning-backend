@@ -21,4 +21,9 @@ class TugasMasuk extends Model
         return Carbon::parse($value)->isoFormat('D MMMM YYYY');
     }
 
+    public function nilai()
+    {
+        return $this->hasOne(Nilai::class, 'id_tugas');
+    }
+
 }
