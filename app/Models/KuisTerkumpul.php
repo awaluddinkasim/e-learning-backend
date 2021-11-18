@@ -21,4 +21,9 @@ class KuisTerkumpul extends Model
     {
         return Carbon::parse($value)->isoFormat('D MMMM YYYY');
     }
+
+    public function nilai()
+    {
+        return $this->hasOne(NilaiKuis::class, 'id_kuis');
+    }
 }

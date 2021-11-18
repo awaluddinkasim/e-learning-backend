@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth:dosen', 'prefix' => 'dosen'], function () {
     Route::post('/kuis', [DosenController::class, 'uploadKuis']);
     Route::delete('/kuis/{id}', [DosenController::class, 'deleteKuis']);
     Route::get('/kuis/{kode}/{id}', [DosenController::class, 'getKuisMasuk']);
+    Route::post('/kuis-masuk/nilai', [DosenController::class, 'kuisNilai']);
 
     Route::post('/profile', [DosenController::class, 'updateProfile']);
     // logout

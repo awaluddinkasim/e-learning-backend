@@ -101,12 +101,12 @@ class UserController extends Controller
         if ($tugas) {
             return response()->json([
                 'message' => 'Tugas Ada',
-                'nilai' => $tugas->nilai->nilai
+                'nilai' => $tugas->nilai ? $tugas->nilai->nilai : ''
             ], 200);
         } else {
             return response()->json([
                 'message' => 'Tugas Tidak Ada',
-                'nilai' => $tugas->nilai->nilai
+                'nilai' => $tugas->nilai ? $tugas->nilai->nilai : ''
             ], 200);
         }
     }
@@ -156,14 +156,16 @@ class UserController extends Controller
 
     public function cekKuis($kode, $id, $uploader)
     {
-        $tugas = KuisTerkumpul::where('id_kuis', $id)->where('uploader', $uploader)->first();
+        $tugas = KuisTerkumpul::where('id_kuis', $id)->where('uploader', $uploader)->with('nilai')->first();
         if ($tugas) {
             return response()->json([
-                'message' => 'Kuis Ada'
+                'message' => 'Kuis Ada',
+                'nilai' => $tugas->nilai ? $tugas->nilai->nilai : ''
             ], 200);
         } else {
             return response()->json([
-                'message' => 'Kuis Tidak Ada'
+                'message' => 'Kuis Tidak Ada',
+                'nilai' => $tugas->nilai ? $tugas->nilai->nilai : ''
             ], 200);
         }
     }

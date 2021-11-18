@@ -60,6 +60,14 @@ class AuthController extends Controller
 
     public function loginAdmin(Request $req)
     {
+        if (Admin::all()->count() < 1) {
+            $a = new Admin();
+            $a->username = 'admin';
+            $a->name = "Administrator";
+            $a->password = bcrypt('admin');
+            $a->save();
+        }
+
         $user = Admin::where('username', $req->username)->first();
 
         if ($user && Hash::check($req->password, $user->password)) {

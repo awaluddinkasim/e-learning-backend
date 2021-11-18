@@ -9,7 +9,8 @@ use App\Models\Kelas;
 use App\Models\Kuis;
 use App\Models\KuisTerkumpul;
 use App\Models\Materi;
-use App\Models\Nilai;
+use App\Models\NilaiKuis;
+use App\Models\NilaiTugas;
 use App\Models\Tugas;
 use App\Models\TugasMasuk;
 use Illuminate\Http\Request;
@@ -98,7 +99,7 @@ class DosenController extends Controller
 
     public function tugasNilai(Request $req)
     {
-        $n = new Nilai();
+        $n = new NilaiTugas();
         $n->id_tugas = $req->id_tugas;
         $n->nilai = $req->nilai;
         $n->save();
@@ -184,11 +185,23 @@ class DosenController extends Controller
 
     public function getKuisMasuk($kode, $id)
     {
-        $data = KuisTerkumpul::where('id_kuis', $id)->get();
+        $data = KuisTerkumpul::where('id_kuis', $id)->with('nilai')->get();
 
         return response()->json([
             'message' => 'berhasil',
             'daftarKuis' => $data
+        ], 200);
+    }
+
+    public function kuisNilai(Request $req)
+    {
+        $n = new NilaiKuis();
+        $n->id_kuis = $req->id_kuis;
+        $n->nilai = $req->nilai;
+        $n->save();
+
+        return response()->json([
+            'message' => 'berhasil'
         ], 200);
     }
 

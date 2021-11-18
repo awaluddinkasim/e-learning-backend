@@ -23,7 +23,7 @@ class TugasMasuk extends Model
 
     public function nilai()
     {
-        return $this->hasOne(Nilai::class, 'id_tugas');
+        return $this->hasOne(NilaiTugas::class, 'id_tugas');
     }
 
 }
