@@ -91,7 +91,7 @@ class UserController extends Controller
         $dataTugas = Tugas::find($id);
 
         // cek deadline
-        if (Carbon::parse($dataTugas->deadline)->isPast()) {
+        if (Carbon::parse($dataTugas->deadline)->isPast() && !Carbon::parse($dataTugas->deadline)->isToday()) {
             return response()->json([
                 'message' => 'telat',
                 'detailTugas' => $dataTugas
@@ -121,6 +121,15 @@ class UserController extends Controller
 
     public function uploadTugas(Request $req, $kode, $id)
     {
+        // cek deadline
+        $dataTugas = Tugas::find($id);
+
+        if (Carbon::parse($dataTugas->deadline)->isPast() && !Carbon::parse($dataTugas->deadline)->isToday()) {
+            return response()->json([
+                'message' => 'telat',
+            ], 403);
+        }
+
         $cekTugas = TugasMasuk::where('id_tugas', $id)->where('uploader', $req->uploader)->first();
         if ($cekTugas) {
             return response()->json([
@@ -157,7 +166,7 @@ class UserController extends Controller
         $dataKuis = Kuis::find($id);
 
         // cek deadline
-        if (Carbon::parse($dataKuis->deadline)->isPast()) {
+        if (Carbon::parse($dataKuis->deadline)->isPast() && !Carbon::parse($dataKuis->deadline)->isToday()) {
             return response()->json([
                 'message' => 'telat',
                 'detailTugas' => $dataKuis
@@ -187,6 +196,15 @@ class UserController extends Controller
 
     public function kumpulKuis(Request $req, $kode, $id)
     {
+        // cek deadline
+        $dataKuis = Kuis::find($id);
+
+        if (Carbon::parse($dataKuis->deadline)->isPast() && !Carbon::parse($dataKuis->deadline)->isToday()) {
+            return response()->json([
+                'message' => 'telat',
+            ], 403);
+        }
+
         $cekKuis = KuisTerkumpul::where('id_kuis', $id)->where('uploader', $req->uploader)->first();
         if ($cekKuis) {
             return response()->json([
