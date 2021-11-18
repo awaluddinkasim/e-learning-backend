@@ -18,6 +18,7 @@ class CreateKuisTable extends Migration
             $table->string('kode_kelas', 7);
             $table->string('judul', 50);
             $table->text('instruksi');
+            $table->date('deadline');
             $table->string('file');
             $table->timestamps();
             $table->foreign('kode_kelas')->references('kode')->on('kelas')

@@ -17,6 +17,11 @@ class Tugas extends Model
         return Carbon::parse($value)->isoFormat('D MMMM YYYY');
     }
 
+    public function getDeadlineAttribute($value)
+    {
+        return Carbon::parse($value)->isoFormat('D MMMM YYYY');
+    }
+
     public function tugasMasuk()
     {
         return $this->hasMany(TugasMasuk::class, 'id_tugas');

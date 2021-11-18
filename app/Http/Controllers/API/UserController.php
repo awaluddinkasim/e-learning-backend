@@ -11,6 +11,7 @@ use App\Models\Materi;
 use App\Models\Tugas;
 use App\Models\TugasMasuk;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -89,6 +90,14 @@ class UserController extends Controller
     {
         $dataTugas = Tugas::find($id);
 
+        // cek deadline
+        if (Carbon::parse($dataTugas->deadline)->isPast()) {
+            return response()->json([
+                'message' => 'telat',
+                'detailTugas' => $dataTugas
+            ], 200);
+        }
+
         return response()->json([
             'message' => 'berhasil',
             'detailTugas' => $dataTugas
@@ -106,7 +115,6 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'message' => 'Tugas Tidak Ada',
-                'nilai' => $tugas->nilai ? $tugas->nilai->nilai : ''
             ], 200);
         }
     }
@@ -148,6 +156,14 @@ class UserController extends Controller
     {
         $dataKuis = Kuis::find($id);
 
+        // cek deadline
+        if (Carbon::parse($dataKuis->deadline)->isPast()) {
+            return response()->json([
+                'message' => 'telat',
+                'detailTugas' => $dataKuis
+            ], 200);
+        }
+
         return response()->json([
             'message' => 'berhasil',
             'detailKuis' => $dataKuis
@@ -165,7 +181,6 @@ class UserController extends Controller
         } else {
             return response()->json([
                 'message' => 'Kuis Tidak Ada',
-                'nilai' => $tugas->nilai ? $tugas->nilai->nilai : ''
             ], 200);
         }
     }

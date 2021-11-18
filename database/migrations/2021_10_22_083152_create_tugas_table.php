@@ -18,6 +18,7 @@ class CreateTugasTable extends Migration
             $table->string('kode_kelas', 7);
             $table->string('nama_tugas', 50);
             $table->text('deskripsi');
+            $table->date('deadline');
             $table->timestamps();
             $table->foreign('kode_kelas')->references('kode')->on('kelas')
             ->onDelete('cascade')

@@ -73,6 +73,7 @@ class DosenController extends Controller
         $t->kode_kelas = $req->kode;
         $t->nama_tugas = $req->judul;
         $t->deskripsi = $req->deskripsi;
+        $t->deadline = $req->deadline;
         $t->save();
         return response()->json([
             'cek' => $req->all()
@@ -166,6 +167,7 @@ class DosenController extends Controller
         $m->kode_kelas = $req->kode;
         $m->judul = $req->judul;
         $m->instruksi = $req->instruksi;
+        $m->deadline = $req->deadline;
         $m->file = $filename;
         $m->save();
 

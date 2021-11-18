@@ -17,6 +17,11 @@ class Kuis extends Model
         return Carbon::parse($value)->isoFormat('D MMMM YYYY');
     }
 
+    public function getDeadlineAttribute($value)
+    {
+        return Carbon::parse($value)->isoFormat('D MMMM YYYY');
+    }
+
     public function terkumpul()
     {
         return $this->hasMany(KuisTerkumpul::class, 'id_kuis');
